@@ -13,6 +13,7 @@ window.requestAnimationFrame = (function(){
 })();
 
 var nau;
+var gameStarted = false;
 
 /**
  * Vector
@@ -133,7 +134,9 @@ Vector.prototype = {
 
 
 function StartGame() {
+    gameStarted = true;
     nau.addSpeed(Vector.new(1,-1));
+
 }
 /**
  * GravityPoint
@@ -173,6 +176,7 @@ GravityPoint.prototype = (function(o) {
         return c < this.radius;
     },
 
+
     startDrag: function() {
         dragging = true;
     },
@@ -185,7 +189,7 @@ GravityPoint.prototype = (function(o) {
         var a = x - this.x;
         var b = y - this.y;
         var c = Math.sqrt( a*a + b*b );
-        console.log(c < this.radius);
+        //console.log(c < this.radius);
         if (c < this.radius) {
             this.x = x;
             this.y = y;
@@ -302,7 +306,7 @@ Particle.prototype = (function(o) {
     return s;
 })({
     addSpeed: function(d) {
-        this._speed.add(d);
+        if (gameStarted) this._speed.add(d);
     },
 
     update: function() {
