@@ -1,7 +1,9 @@
 /**
  * requestAnimationFrame
  */
-window.requestAnimationFrame = (function(){
+
+
+ window.requestAnimationFrame = (function(){
     return  window.requestAnimationFrame       ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame    ||
@@ -13,8 +15,6 @@ window.requestAnimationFrame = (function(){
 })();
 
 var nau;
-var gameStarted = false;
-var particles;
 
 /**
  * Vector
@@ -135,25 +135,15 @@ Vector.prototype = {
 
 
 function StartGame() {
-    gameStarted = true;
     nau.addSpeed(Vector.new(1,-1));
-
-}
-
-function ResetGame() {
-    gameStarted = false;
-    particles.pop();
-    /*nau.resetSpeed();
-    nau.resetPos();*/
 }
 /**
  * GravityPoint
  */
-function GravityPoint(x, y, radius, targets, isfinish) {
+function GravityPoint(x, y, radius, targets) {
     Vector.call(this, x, y);
     this.radius = radius;
     this.currentRadius = radius * 0.5;
-    this.isfinish = isfinish;
 
     this._targets = {
         particles: targets.particles || [],
@@ -170,7 +160,7 @@ GravityPoint.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    gravity:       0.03,
+    gravity:       0.05,
     isMouseOver:   false,
     dragging:      false,
     destroyed:     false,
@@ -185,7 +175,6 @@ GravityPoint.prototype = (function(o) {
         return c < this.radius;
     },
 
-
     startDrag: function() {
         dragging = true;
     },
@@ -195,15 +184,13 @@ GravityPoint.prototype = (function(o) {
     },
 
     drag: function(x, y) {
-        if (!this.isfinish) {
         var a = x - this.x;
         var b = y - this.y;
         var c = Math.sqrt( a*a + b*b );
-        //console.log(c < this.radius);
+        console.log(c < this.radius);
         if (c < this.radius) {
             this.x = x;
             this.y = y;
-        }
         }
     },
 
@@ -212,13 +199,15 @@ GravityPoint.prototype = (function(o) {
     },
 
     collapse: function(e) {
+        this.currentRadius *= 1.75;
+        this._collapsing = true;
     },
 
     render: function(ctx) {
         if (this.destroyed) return;
 
-        particles = this._targets.particles;
-            var i, len;
+        var particles = this._targets.particles,
+            i, len;
 
         for (i = 0, len = particles.length; i < len; i++) {
             particles[i].addSpeed(Vector.sub(this, particles[i]).normalize().scale(this.gravity));
@@ -287,8 +276,7 @@ GravityPoint.prototype = (function(o) {
 
         r = Math.random() * this.currentRadius * 0.7 + this.currentRadius * 0.3;
         grd = ctx.createRadialGradient(this.x, this.y, r, this.x, this.y, this.currentRadius);
-        if (this.isfinish) grd.addColorStop(0, 'rgba(125, 0, 255, 1)');
-        else grd.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        grd.addColorStop(0, 'rgba(0, 0, 0, 1)');
         grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(255, 196, 0, 0.15)' : 'rgba(103, 181, 191, 0.75)');
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.currentRadius, 0, Math.PI * 2, false);
@@ -315,12 +303,8 @@ Particle.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    resetSpeed: function() {
-        this._speed.set(0,0);
-    },
-
     addSpeed: function(d) {
-        if (gameStarted) this._speed.add(d);
+        this._speed.add(d);
     },
 
     update: function() {
@@ -328,11 +312,6 @@ Particle.prototype = (function(o) {
 
         this._latest.set(this);
         this.add(this._speed);
-    },
-
-    resetPos: function() {
-        this.x = screenWidth/2;
-        this.y = screenHeight;
     }
 
     // render: function(ctx) {
@@ -400,6 +379,90 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
+    /*function mouseMove(e) {
+        console.log("mouseMove");
+        mouse.set(e.clientX, e.clientY);
+
+        var i, g;
+        for (i = gravities.length - 1; i >= 0; i--) {
+            g = gravities[i];
+            if ((g.hitTest(mouse)))
+                g.isMouseOver = true;
+            else
+                g.isMouseOver = false;
+        }
+
+        //canvas.style.cursor = hit ? 'pointer' : 'default';
+    }
+
+    function mouseDown(e) {
+
+        console.log("mouseDown");
+        for (var i = gravities.length - 1; i >= 0; i--) {
+            if (gravities[i].isMouseOver) {
+                gravities[i].startDrag(mouse);
+                return;
+
+            }
+        }
+    }
+
+    function mouseUp(e) {
+        console.log("mouseUp");
+        for (var i = 0, len = gravities.length; i < len; i++) {
+            if (gravities[i].dragging) {
+                gravities[i].endDrag();
+                break;
+            }
+        }
+    }*/
+
+
+    /*let moving = null;
+function mouseMove(e) {
+    mouse.set(e.clientX, e.clientY);
+    let i, g, hit = false;
+    for (i = gravities.length - 1; i >= 0; i--) {
+            g = gravities[i];
+            if ((!hit && g.hitTest(mouse)) || g.dragging)
+                g.isMouseOver = hit = true;
+            else
+                g.isMouseOver = false;
+        }
+
+
+        if (moving) {
+            if (e.clientX) {
+                moving.style.left = e.clientX - moving.cientWidth/2;
+                moving.style.top = e.clientY - moving.clientHeight/2;
+            }
+            else {
+            // touchmove - assuming a single touchpoint
+            moving.style.left = event.changedTouches[0].clientX - moving.clientWidth/2;
+            moving.style.top = event.changedTouches[0].clientY - moving.clientHeight/2;
+        }
+    }
+}
+
+
+function mouseDown(e) {
+        moving = e.target;
+
+        moving.style.position = 'fixed';
+    }
+
+function mouseUp(e) {
+        if (moving) {
+            moving.style.left = '';
+            moving.style.top = '';
+            moving.style.height = '';
+            moving.style.width = '';
+            moving.style.position = '';
+
+            moving = null;
+    }
+}*/
+
     function doubleClick(e) {
         for (var i = gravities.length - 1; i >= 0; i--) {
             if (gravities[i].isMouseOver) {
@@ -416,6 +479,7 @@ Particle.prototype = (function(o) {
         var i, p;
         for (i = 0; i < num; i++) {
             nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
+            nau.addSpeed(Vector.new(0,0));
             particles.push(nau);
         }
     }
@@ -443,6 +507,7 @@ Particle.prototype = (function(o) {
     window.addEventListener('resize', resize, false);
     resize(null);
 
+    addParticle(control.particleNum);
 
     canvas.addEventListener('touchmove', function(e) {
         var touchLocation = e.targetTouches[0];
@@ -481,24 +546,15 @@ Particle.prototype = (function(o) {
     canvas.addEventListener('dblclick', doubleClick, false);
 
 
-    addParticle(control.particleNum);
+    gravities.push(new GravityPoint(screenWidth/10, 5/10*screenHeight,30, {particles:particles, gravities: null }));
 
-    gravities.push(new GravityPoint(screenWidth/2, 0, 50, {particles:null, gravities: null }, true));     //meta
-
-
-
-    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,30, {particles:particles, gravities: null }, false));
-
-    gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }, false));
-
-    gravities.push(new GravityPoint(screenWidth*3/4, 3/10*screenHeight,50, {particles:particles, gravities: null }, false));
+    gravities.push(new GravityPoint(screenWidth/10, 9/10*screenHeight,40, {particles:particles, gravities: null }));
 
     // GUI
 
     // Start Update
 
     var loop = function() {
-        if (particles.length == 0) addParticle(control.particleNum);
         var i, len, g, p;
 
         context.save();
@@ -555,7 +611,35 @@ Particle.prototype = (function(o) {
         context.drawImage(bufferCvs, 0, 0);
 
         requestAnimationFrame(loop);
+
+        var c = document.getElementById("c");
+        var ctx = c.getContext("2d");
+
+        // ctx.moveTo(200, 25);
+        // ctx.lineTo(200, 50);
+        // ctx.stroke();
+
+        // ctx.moveTo(150, 25);
+        // ctx.lineTo(200, 25);
+        // ctx.stroke();
+
+        // ctx.moveTo(150, 25);
+        // ctx.lineTo(150, 50);
+        // ctx.stroke();
+
+        // ctx.moveTo(150, 50);
+        // ctx.lineTo(200, 50);
+        // ctx.stroke();
+
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var img = document.getElementById("../../img/spacestation.png");
+            ctx.drawImage(img,10,10);
     };
+    
     loop();
 
 })();
+
+
+
