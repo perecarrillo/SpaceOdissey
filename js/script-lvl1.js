@@ -14,7 +14,9 @@ window.requestAnimationFrame = (function(){
 
 var nau;
 var gameStarted = false;
+var gameIsRunning = false;
 var particles;
+var gravities;
 
 /**
  * Vector
@@ -135,12 +137,17 @@ Vector.prototype = {
 
 
 function StartGame() {
+    if (!gameIsRunning) {
     gameStarted = true;
+    gameIsRunning = true;
     nau.addSpeed(Vector.new(0.5,-0.5));
+    }
 
 }
 
 function ResetGame() {
+
+    gameIsRunning = false;
     gameStarted = false;
     particles.pop();
     /*nau.resetSpeed();
@@ -154,7 +161,7 @@ function GravityPoint(x, y, radius, targets, isfinish) {
     this.radius = radius;
     this.currentRadius = radius * 0.5;
     this.isfinish = isfinish
-    this.gravity = radius*radius*0.000025;
+    this.gravity = (isfinish ? 0:radius*radius*0.000025);
 
     this._targets = {
         particles: targets.particles || [],
@@ -171,12 +178,7 @@ GravityPoint.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    isMouseOver:   false,
-    dragging:      false,
-    destroyed:     false,
     _easeRadius:   0,
-    _dragDistance: null,
-    _collapsing:   false,
 
     hitTest: function(p) {
         var a = p.pageX - this.x;
@@ -186,20 +188,12 @@ GravityPoint.prototype = (function(o) {
     },
 
 
-    startDrag: function() {
-        dragging = true;
-    },
-
-    endDrag: function() {
-        dragging = false;
-    },
-
     drag: function(x, y) {
         if (!this.isfinish) {
+
         var a = x - this.x;
         var b = y - this.y;
         var c = Math.sqrt( a*a + b*b );
-        //console.log(c < this.radius);
         if (c < this.radius) {
             this.x = x;
             this.y = y;
@@ -235,8 +229,8 @@ GravityPoint.prototype = (function(o) {
             return;
         }
 
-        var gravities = this._targets.gravities,
-            g, absorp,
+        gravities = this._targets.gravities;
+            var g, absorp,
             area = this.radius * this.radius * Math.PI, garea;
 
         for (i = 0, len = gravities.length; i < len; i++) {
@@ -334,26 +328,6 @@ Particle.prototype = (function(o) {
         this.x = screenWidth/2;
         this.y = screenHeight;
     }
-
-    // render: function(ctx) {
-    //     if (this._speed.length() > 12) this._speed.normalize().scale(12);
-
-    //     this._latest.set(this);
-    //     this.add(this._speed);
-
-    //     ctx.save();
-    //     ctx.fillStyle = ctx.strokeStyle = '#fff';
-    //     ctx.lineCap = ctx.lineJoin = 'round';
-    //     ctx.lineWidth = this.radius * 2;
-    //     ctx.beginPath();
-    //     ctx.moveTo(this.x, this.y);
-    //     ctx.lineTo(this._latest.x, this._latest.y);
-    //     ctx.stroke();
-    //     ctx.beginPath();
-    //     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    //     ctx.fill();
-    //     ctx.restore();
-    // }
 });
 
 
@@ -432,6 +406,8 @@ Particle.prototype = (function(o) {
     }
 
     function checkCollision(x,y){
+
+        if (y < 0) ResetGame();
         for (var i = 0; i < gravities.length; ++i) {
             g = gravities[i];
             if(dist(x,y,g.x,g.y) < g.radius){
@@ -461,38 +437,15 @@ Particle.prototype = (function(o) {
 
 
     canvas.addEventListener('touchmove', function(e) {
+        if (!gameStarted) {
         var touchLocation = e.targetTouches[0];
         var i;
         for (i = 0; i < gravities.length; ++i) {
 
             gravities[i].drag(touchLocation.pageX, touchLocation.pageY);
-            //console.log(gravities[i], gravities[i].dragging);
+        }
         }
     });
-
-    canvas.addEventListener('touchstart', function(e) {
-        var i, g;
-        var touchLocation = e.targetTouches[0];
-        for (i = 0; i < gravities.length; ++i) {
-            g = gravities[i];
-            if (gravities[i].hitTest(touchLocation)) {
-                gravities[i].startDrag();
-            }
-            //console.log(gravities[i], gravities[i].dragging);
-        }
-    });
-
-    canvas.addEventListener('touchend', function(e) {
-    var i;
-    for (i = 0; i < gravities.length; ++i) {
-        g = gravities[i];
-        g.endDrag();
-    }
-  });
-
-    /*canvas.addEventListener('mousemove', mouseMove, false);
-    canvas.addEventListener('mousedown', mouseDown, false);
-    canvas.addEventListener('mouseup', mouseUp, false);*/
 
     canvas.addEventListener('dblclick', doubleClick, false);
 
