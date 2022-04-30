@@ -3,13 +3,13 @@
 html{
     font-family: 'Orbitron', sans-serif;
     overflow: hidden;
+    
     height: 100vh;
 }
-#index,#creators, #levels{
+#index,#creators, #levels, #tutorial{
     text-align: center;
     background: url("../img/background.gif") no-repeat;
     background-size: cover;
-    background-position: center;
     color: white;
 
 }
@@ -72,7 +72,13 @@ a{
     font-size: 30px;
 }
 
+.back{
+    color: white;
+    position: absolute;
+    bottom: 1vh;
+    left: 1vw;
+}
 
-
-
-
+#tutorial p {
+    padding: 1vw;
+}
