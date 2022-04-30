@@ -14,6 +14,7 @@ window.requestAnimationFrame = (function(){
 
 var nau;
 var gameStarted = false;
+var particles;
 
 /**
  * Vector
@@ -141,8 +142,12 @@ function StartGame() {
 
 function ResetGame() {
     gameStarted = false;
-    nau.resetSpeed();
-    nau.resetPos();
+    particles.pop();
+    var i, p;
+        for (i = 0; i < num; i++) {
+            nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
+            particles.push(nau);
+        }
 }
 /**
  * GravityPoint
@@ -212,8 +217,8 @@ GravityPoint.prototype = (function(o) {
     render: function(ctx) {
         if (this.destroyed) return;
 
-        var particles = this._targets.particles,
-            i, len;
+        particles = this._targets.particles;
+            var i, len;
 
         for (i = 0, len = particles.length; i < len; i++) {
             particles[i].addSpeed(Vector.sub(this, particles[i]).normalize().scale(this.gravity));
@@ -322,11 +327,6 @@ Particle.prototype = (function(o) {
 
         this._latest.set(this);
         this.add(this._speed);
-    },
-
-    resetPos: function() {
-        this.x = 0;
-        //this._lastest.set(screenWidth/2, screenHeight);
     }
 
     // render: function(ctx) {
