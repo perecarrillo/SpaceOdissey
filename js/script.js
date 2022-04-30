@@ -195,6 +195,7 @@ GravityPoint.prototype = (function(o) {
     },
 
     drag: function(x, y) {
+        if (!this.isfinish) {
         var a = x - this.x;
         var b = y - this.y;
         var c = Math.sqrt( a*a + b*b );
@@ -202,6 +203,7 @@ GravityPoint.prototype = (function(o) {
         if (c < this.radius) {
             this.x = x;
             this.y = y;
+        }
         }
     },
 
