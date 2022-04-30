@@ -370,7 +370,8 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
-    function mouseMove(e) {
+    /*function mouseMove(e) {
+        console.log("mouseMove");
         mouse.set(e.clientX, e.clientY);
 
         var i, g;
@@ -382,27 +383,30 @@ Particle.prototype = (function(o) {
                 g.isMouseOver = false;
         }
 
-        canvas.style.cursor = hit ? 'pointer' : 'default';
+        //canvas.style.cursor = hit ? 'pointer' : 'default';
     }
 
     function mouseDown(e) {
 
+        console.log("mouseDown");
         for (var i = gravities.length - 1; i >= 0; i--) {
             if (gravities[i].isMouseOver) {
                 gravities[i].startDrag(mouse);
                 return;
+
             }
         }
     }
 
     function mouseUp(e) {
+        console.log("mouseUp");
         for (var i = 0, len = gravities.length; i < len; i++) {
             if (gravities[i].dragging) {
                 gravities[i].endDrag();
                 break;
             }
         }
-    }
+    }*/
 
 
     /*let moving = null;
@@ -496,13 +500,22 @@ function mouseUp(e) {
 
     addParticle(control.particleNum);
 
-    canvas.addEventListener('touchmove', mouseMove, false);
-    canvas.addEventListener('touchstart', mouseDown, false);
-    canvas.addEventListener('touchend', mouseUp, false);
+    canvas.addEventListener('touchmove', function(e) {
+        var touchLocation = e.targetTouches[0];
 
-    canvas.addEventListener('mousemove', mouseMove, false);
+        gravities[gravities.length-1].drag(touchLocation.pageX, touchLocation.pageY);
+    }
+    );
+
+    canvas.addEventListener('touchend', function(e) {
+    // current box position.
+    /*var x = parseInt();
+    var y = parseInt();*/
+  });
+
+    /*canvas.addEventListener('mousemove', mouseMove, false);
     canvas.addEventListener('mousedown', mouseDown, false);
-    canvas.addEventListener('mouseup', mouseUp, false);
+    canvas.addEventListener('mouseup', mouseUp, false);*/
 
     canvas.addEventListener('dblclick', doubleClick, false);
 
