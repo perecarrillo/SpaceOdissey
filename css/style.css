@@ -6,7 +6,7 @@ html{
     
     height: 100vh;
 }
-#index,#creators, #levels, #tutorial{
+#index,#creators, #levels, #tutorial, #win{
     text-align: center;
     background: url("../img/background.gif") no-repeat;
     background-size: cover;
@@ -82,3 +82,11 @@ a{
 #tutorial p {
     padding: 1vw;
 }
+
+#win p {
+    padding: 1vw;
+}
+
+
+
+
