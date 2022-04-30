@@ -134,21 +134,7 @@ Vector.prototype = {
 
 
 
-function StartGame() {
-    gameStarted = true;
-    nau.addSpeed(Vector.new(1,-1));
 
-}
-
-function ResetGame() {
-    gameStarted = false;
-    particles.pop();
-    var i, p;
-        for (i = 0; i < 2; i++) {
-            nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
-            particles.push(nau);
-        }
-}
 /**
  * GravityPoint
  */
@@ -349,6 +335,22 @@ Particle.prototype = (function(o) {
     //     ctx.restore();
     // }
 });
+
+function StartGame() {
+    gameStarted = true;
+    nau.addSpeed(Vector.new(1,-1));
+
+}
+
+function ResetGame() {
+    gameStarted = false;
+    particles.pop();
+    var i, p;
+        for (i = 0; i < 2; i++) {
+            nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
+            particles.push(nau);
+        }
+}
 
 
 
