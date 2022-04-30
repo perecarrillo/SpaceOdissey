@@ -185,6 +185,11 @@ GravityPoint.prototype = (function(o) {
         this.dragging = false;
     },
 
+    mou: function(x, y) {
+       this.x = x;
+       this.y = y;
+    },
+
     addSpeed: function(d) {
         this._speed = this._speed.add(d);
     },
@@ -503,9 +508,16 @@ function mouseUp(e) {
     canvas.addEventListener('touchmove', function(e) {
         var touchLocation = e.targetTouches[0];
 
-        gravities[gravities.length-1].drag(touchLocation.pageX, touchLocation.pageY);
+        gravities[gravities.length-1].mou(touchLocation.pageX, touchLocation.pageY);
     }
     );
+
+    /*canvas.addEventListener('touchstart', function(e) {
+        var touchLocation = e.targetTouches[0];
+        gravities[gravities.length-1].startDrag(touchLocation);
+
+    }
+    );*/
 
     canvas.addEventListener('touchend', function(e) {
     // current box position.
