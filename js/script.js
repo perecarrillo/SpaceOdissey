@@ -503,7 +503,7 @@ Particle.prototype = (function(o) {
 
 
 
-    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,15, {particles:particles, gravities: null }, false));
+    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,20, {particles:particles, gravities: null }, false));
 
     gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }, false));
 
