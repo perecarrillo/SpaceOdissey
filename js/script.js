@@ -201,8 +201,6 @@ GravityPoint.prototype = (function(o) {
     },
 
     collapse: function(e) {
-        this.currentRadius *= 1.75;
-        this._collapsing = true;
     },
 
     render: function(ctx) {
@@ -468,7 +466,7 @@ Particle.prototype = (function(o) {
 
     gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }));
 
-    gravities.push(new GravityPoint(screenWidth*3/4, 3/10*screenHeight,40, {particles:particles, gravities: null }));
+    gravities.push(new GravityPoint(screenWidth*3/4, 3/10*screenHeight,50, {particles:particles, gravities: null }));
 
     // GUI
 
