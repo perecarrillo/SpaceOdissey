@@ -154,7 +154,7 @@ function GravityPoint(x, y, radius, targets, isfinish) {
     this.radius = radius;
     this.currentRadius = radius * 0.5;
     this.isfinish = isfinish
-    this.gravity = radius*radius*0.00003;
+    this.gravity = radius*radius*0.000025;
 
     this._targets = {
         particles: targets.particles || [],
