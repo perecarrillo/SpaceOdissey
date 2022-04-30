@@ -370,14 +370,14 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
-    /*function mouseMove(e) {
+    function mouseMove(e) {
         mouse.set(e.clientX, e.clientY);
 
-        var i, g, hit = false;
+        var i, g;
         for (i = gravities.length - 1; i >= 0; i--) {
             g = gravities[i];
-            if ((!hit && g.hitTest(mouse)) || g.dragging)
-                g.isMouseOver = hit = true;
+            if ((g.hitTest(mouse)))
+                g.isMouseOver = true;
             else
                 g.isMouseOver = false;
         }
@@ -386,16 +386,13 @@ Particle.prototype = (function(o) {
     }
 
     function mouseDown(e) {
+
         for (var i = gravities.length - 1; i >= 0; i--) {
             if (gravities[i].isMouseOver) {
                 gravities[i].startDrag(mouse);
                 return;
             }
         }
-        gravities.push(new GravityPoint(e.clientX, e.clientY, G_POINT_RADIUS, {
-            particles: particles,
-            gravities: gravities
-        }));
     }
 
     function mouseUp(e) {
@@ -405,11 +402,21 @@ Particle.prototype = (function(o) {
                 break;
             }
         }
-    }*/
+    }
 
 
-    let moving = null;
+    /*let moving = null;
 function mouseMove(e) {
+    mouse.set(e.clientX, e.clientY);
+    let i, g, hit = false;
+    for (i = gravities.length - 1; i >= 0; i--) {
+            g = gravities[i];
+            if ((!hit && g.hitTest(mouse)) || g.dragging)
+                g.isMouseOver = hit = true;
+            else
+                g.isMouseOver = false;
+        }
+
 
         if (moving) {
             if (e.clientX) {
@@ -441,7 +448,7 @@ function mouseUp(e) {
 
             moving = null;
     }
-}
+}*/
 
     function doubleClick(e) {
         for (var i = gravities.length - 1; i >= 0; i--) {
@@ -492,6 +499,11 @@ function mouseUp(e) {
     canvas.addEventListener('touchmove', mouseMove, false);
     canvas.addEventListener('touchstart', mouseDown, false);
     canvas.addEventListener('touchend', mouseUp, false);
+
+    canvas.addEventListener('mousemove', mouseMove, false);
+    canvas.addEventListener('mousedown', mouseDown, false);
+    canvas.addEventListener('mouseup', mouseUp, false);
+
     canvas.addEventListener('dblclick', doubleClick, false);
 
 
