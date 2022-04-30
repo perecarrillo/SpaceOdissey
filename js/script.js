@@ -407,43 +407,6 @@ Particle.prototype = (function(o) {
         }
     }
 
-    function touchmove(e) {
-        mouse.set(e.clientX, e.clientY);
-
-        var i, g, hit = false;
-        for (i = gravities.length - 1; i >= 0; i--) {
-            g = gravities[i];
-            if ((!hit && g.hitTest(mouse)) || g.dragging)
-                g.isMouseOver = hit = true;
-            else
-                g.isMouseOver = false;
-        }
-
-        canvas.style.cursor = hit ? 'pointer' : 'default';
-    }
-
-    function touchstart(e) {
-        for (var i = gravities.length - 1; i >= 0; i--) {
-            if (gravities[i].isMouseOver) {
-                gravities[i].startDrag(mouse);
-                return;
-            }
-        }
-        gravities.push(new GravityPoint(e.clientX, e.clientY, G_POINT_RADIUS, {
-            particles: particles,
-            gravities: gravities
-        }));
-    }
-
-    function touchend(e) {
-        for (var i = 0, len = gravities.length; i < len; i++) {
-            if (gravities[i].dragging) {
-                gravities[i].endDrag();
-                break;
-            }
-        }
-    }
-
 
     function doubleClick(e) {
         for (var i = gravities.length - 1; i >= 0; i--) {
@@ -491,9 +454,9 @@ Particle.prototype = (function(o) {
 
     addParticle(control.particleNum);
 
-    canvas.addEventListener('mousemove', mouseMove, false);
-    canvas.addEventListener('mousedown', mouseDown, false);
-    canvas.addEventListener('mouseup', mouseUp, false);
+    canvas.addEventListener('touchmove', mouseMove, false);
+    canvas.addEventListener('touchstart', mouseDown, false);
+    canvas.addEventListener('touchend', mouseUp, false);
     canvas.addEventListener('dblclick', doubleClick, false);
 
 
