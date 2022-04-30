@@ -14,7 +14,6 @@ window.requestAnimationFrame = (function(){
 
 var nau;
 var gameStarted = false;
-var particles;
 
 /**
  * Vector
@@ -134,7 +133,17 @@ Vector.prototype = {
 
 
 
+function StartGame() {
+    gameStarted = true;
+    nau.addSpeed(Vector.new(1,-1));
 
+}
+
+function ResetGame() {
+    gameStarted = false;
+    nau.resetSpeed();
+    nau.resetPos();
+}
 /**
  * GravityPoint
  */
@@ -203,8 +212,8 @@ GravityPoint.prototype = (function(o) {
     render: function(ctx) {
         if (this.destroyed) return;
 
-        particles = this._targets.particles;
-            var i, len;
+        var particles = this._targets.particles,
+            i, len;
 
         for (i = 0, len = particles.length; i < len; i++) {
             particles[i].addSpeed(Vector.sub(this, particles[i]).normalize().scale(this.gravity));
@@ -313,6 +322,11 @@ Particle.prototype = (function(o) {
 
         this._latest.set(this);
         this.add(this._speed);
+    },
+
+    resetPos: function() {
+        this.x = screenWidth/2;
+        this.y = screenHeight;
     }
 
     // render: function(ctx) {
@@ -335,19 +349,6 @@ Particle.prototype = (function(o) {
     //     ctx.restore();
     // }
 });
-
-function StartGame() {
-    gameStarted = true;
-    nau.addSpeed(Vector.new(1,-1));
-
-}
-
-function ResetGame() {
-    gameStarted = false;
-    particles.pop();
-    nau = new Particle(screenWidth/2,screenHeight,10);
-    particles.push(nau);
-}
 
 
 
