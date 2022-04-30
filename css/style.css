@@ -70,6 +70,13 @@ a{
     bottom: 10px;
     left: 10px;
     font-size: 30px;
+
+    border: 1px solid white;
+    box-shadow:  0 0 5px white,  0 0 5px #0bf4f3 inset;
+    color: white;
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .back{
