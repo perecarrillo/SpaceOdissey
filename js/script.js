@@ -149,10 +149,11 @@ function ResetGame() {
 /**
  * GravityPoint
  */
-function GravityPoint(x, y, radius, targets) {
+function GravityPoint(x, y, radius, targets, isfinish) {
     Vector.call(this, x, y);
     this.radius = radius;
     this.currentRadius = radius * 0.5;
+    this.isfinish = isfinish;
 
     this._targets = {
         particles: targets.particles || [],
@@ -284,7 +285,8 @@ GravityPoint.prototype = (function(o) {
 
         r = Math.random() * this.currentRadius * 0.7 + this.currentRadius * 0.3;
         grd = ctx.createRadialGradient(this.x, this.y, r, this.x, this.y, this.currentRadius);
-        grd.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        if (this.isfinish) grd.addColorStop(0, 'rgba(125, 0, 255, 1)');
+        else grd.addColorStop(0, 'rgba(0, 0, 0, 1)');
         grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(255, 196, 0, 0.15)' : 'rgba(103, 181, 191, 0.75)');
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.currentRadius, 0, Math.PI * 2, false);
@@ -479,11 +481,15 @@ Particle.prototype = (function(o) {
 
     addParticle(control.particleNum);
 
-    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,30, {particles:particles, gravities: null }));
+    gravities.push(new GravityPoint(screenWidth/2, 0, 50, {particles:null, gravities: null }, true));     //meta
 
-    gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }));
 
-    gravities.push(new GravityPoint(screenWidth*3/4, 3/10*screenHeight,50, {particles:particles, gravities: null }));
+
+    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,30, {particles:particles, gravities: null }, false));
+
+    gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }, false));
+
+    gravities.push(new GravityPoint(screenWidth*3/4, 3/10*screenHeight,50, {particles:particles, gravities: null }, false));
 
     // GUI
 
