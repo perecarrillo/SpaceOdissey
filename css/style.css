@@ -1,8 +1,39 @@
-#index{
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+html{
+    font-family: 'Orbitron', sans-serif;
+    overflow: hidden;
+}
+#index,#creators{
     text-align: center;
+    background: url("../img/background.gif") no-repeat;
+    background-size: cover;
+    color: white;
+
 }
 
-#index ul{
-    list-style: none;
+a{
+    text-decoration: none;
+    color: white;
 }
+
+
+#index ul, #creators ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#index ul li, #creators ul li{
+    list-style: none;       
+    margin: 5em;
+}
+
+#index main, #index footer{
+    
+    height: 100vh;
+    justify-content: center;
+}
+
+
 
