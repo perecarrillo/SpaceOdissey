@@ -407,6 +407,44 @@ Particle.prototype = (function(o) {
         }
     }
 
+    function touchmove(e) {
+        mouse.set(e.clientX, e.clientY);
+
+        var i, g, hit = false;
+        for (i = gravities.length - 1; i >= 0; i--) {
+            g = gravities[i];
+            if ((!hit && g.hitTest(mouse)) || g.dragging)
+                g.isMouseOver = hit = true;
+            else
+                g.isMouseOver = false;
+        }
+
+        canvas.style.cursor = hit ? 'pointer' : 'default';
+    }
+
+    function touchstart(e) {
+        for (var i = gravities.length - 1; i >= 0; i--) {
+            if (gravities[i].isMouseOver) {
+                gravities[i].startDrag(mouse);
+                return;
+            }
+        }
+        gravities.push(new GravityPoint(e.clientX, e.clientY, G_POINT_RADIUS, {
+            particles: particles,
+            gravities: gravities
+        }));
+    }
+
+    function touchend(e) {
+        for (var i = 0, len = gravities.length; i < len; i++) {
+            if (gravities[i].dragging) {
+                gravities[i].endDrag();
+                break;
+            }
+        }
+    }
+
+
     function doubleClick(e) {
         for (var i = gravities.length - 1; i >= 0; i--) {
             if (gravities[i].isMouseOver) {
@@ -458,6 +496,8 @@ Particle.prototype = (function(o) {
     canvas.addEventListener('mouseup', mouseUp, false);
     canvas.addEventListener('dblclick', doubleClick, false);
 
+
+    gravities.push(new GravityPoint(screenWidth/10, 9/10*screenHeight,30, {particles:particles, gravities: null }));
 
     // GUI
 
