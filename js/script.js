@@ -370,7 +370,7 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
-    function mouseMove(e) {
+    /*function mouseMove(e) {
         mouse.set(e.clientX, e.clientY);
 
         var i, g, hit = false;
@@ -405,8 +405,43 @@ Particle.prototype = (function(o) {
                 break;
             }
         }
+    }*/
+
+
+    let moving = null;
+function mouseMove(e) {
+
+        if (moving) {
+            if (e.clientX) {
+                moving.style.left = e.clientX - moving.cientWidth/2;
+                moving.style.top = e.clientY - moving.clientHeight/2;
+            }
+            else {
+            // touchmove - assuming a single touchpoint
+            moving.style.left = event.changedTouches[0].clientX - moving.clientWidth/2;
+            moving.style.top = event.changedTouches[0].clientY - moving.clientHeight/2;
+        }
+    }
+}
+
+
+function mouseDown(e) {
+        moving = e.target;
+
+        moving.style.position = 'fixed';
     }
 
+function mouseUp(e) {
+        if (moving) {
+            moving.style.left = '';
+            moving.style.top = '';
+            moving.style.height = '';
+            moving.style.width = '';
+            moving.style.position = '';
+
+            moving = null;
+    }
+}
 
     function doubleClick(e) {
         for (var i = gravities.length - 1; i >= 0; i--) {
