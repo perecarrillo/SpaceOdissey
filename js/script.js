@@ -151,7 +151,7 @@ function GravityPoint(x, y, radius, targets) {
 }
 
 GravityPoint.RADIUS_LIMIT = 65;
-GravityPoint.interferenceToPoint = true;
+GravityPoint.interferenceToPoint = false;
 
 GravityPoint.prototype = (function(o) {
     var s = new Vector(0, 0), p;
@@ -167,27 +167,29 @@ GravityPoint.prototype = (function(o) {
     _collapsing:   false,
 
     hitTest: function(p) {
-        return this.distanceTo(p) < this.radius;
+        var a = p.pageX - this.x;
+        var b = p.pageY - this.y;
+        var c = Math.sqrt( a*a + b*b );
+        return c < this.radius;
     },
 
-    startDrag: function(dragStartPoint) {
-        this._dragDistance = Vector.sub(dragStartPoint, this);
-        this.dragging = true;
-    },
-
-    drag: function(dragToPoint) {
-        this.x = dragToPoint.x - this._dragDistance.x;
-        this.y = dragToPoint.y - this._dragDistance.y;
+    startDrag: function() {
+        dragging = true;
     },
 
     endDrag: function() {
-        this._dragDistance = null;
-        this.dragging = false;
+        dragging = false;
     },
 
-    mou: function(x, y) {
-       this.x = x;
-       this.y = y;
+    drag: function(x, y) {
+        var a = x - this.x;
+        var b = y - this.y;
+        var c = Math.sqrt( a*a + b*b );
+        console.log(c < this.radius);
+        if (c < this.radius) {
+            this.x = x;
+            this.y = y;
+        }
     },
 
     addSpeed: function(d) {
@@ -507,22 +509,32 @@ function mouseUp(e) {
 
     canvas.addEventListener('touchmove', function(e) {
         var touchLocation = e.targetTouches[0];
+        var i;
+        for (i = 0; i < gravities.length; ++i) {
 
-        gravities[gravities.length-1].mou(touchLocation.pageX, touchLocation.pageY);
-    }
-    );
+            gravities[i].drag(touchLocation.pageX, touchLocation.pageY);
+            //console.log(gravities[i], gravities[i].dragging);
+        }
+    });
 
-    /*canvas.addEventListener('touchstart', function(e) {
+    canvas.addEventListener('touchstart', function(e) {
+        var i, g;
         var touchLocation = e.targetTouches[0];
-        gravities[gravities.length-1].startDrag(touchLocation);
-
-    }
-    );*/
+        for (i = 0; i < gravities.length; ++i) {
+            g = gravities[i];
+            if (gravities[i].hitTest(touchLocation)) {
+                gravities[i].startDrag();
+            }
+            //console.log(gravities[i], gravities[i].dragging);
+        }
+    });
 
     canvas.addEventListener('touchend', function(e) {
-    // current box position.
-    /*var x = parseInt();
-    var y = parseInt();*/
+    var i;
+    for (i = 0; i < gravities.length; ++i) {
+        g = gravities[i];
+        g.endDrag();
+    }
   });
 
     /*canvas.addEventListener('mousemove', mouseMove, false);
@@ -532,7 +544,9 @@ function mouseUp(e) {
     canvas.addEventListener('dblclick', doubleClick, false);
 
 
-    gravities.push(new GravityPoint(screenWidth/10, 9/10*screenHeight,30, {particles:particles, gravities: null }));
+    gravities.push(new GravityPoint(screenWidth/10, 5/10*screenHeight,30, {particles:particles, gravities: null }));
+
+    gravities.push(new GravityPoint(screenWidth/10, 9/10*screenHeight,40, {particles:particles, gravities: null }));
 
     // GUI
 
