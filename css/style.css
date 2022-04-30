@@ -68,33 +68,37 @@ a{
 .game .btn {
     font-family: 'Orbitron', sans-serif;
     position: absolute;
+    font-size: 30px;
+
+    border: 1px solid white;
+    box-shadow:  0 0 5px white,  0 0 5px #0bf4f3 inset;
+    color: white;
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.game .btn:active{
+    font-family: 'Orbitron', sans-serif;
+    
+    font-size: 30px;
+
+    border: 1px solid white;
+    box-shadow:  0 0 5px white,  0 0 5px #0bf4f3 inset;
+    color: black;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#btn1{
     bottom: 10px;
     left: 10px;
-    font-size: 30px;
-
-    border: 1px solid white;
-    box-shadow:  0 0 5px white,  0 0 5px #0bf4f3 inset;
-    color: white;
-    background-color: transparent;
-    border-radius: 5px;
-    padding: 5px;
 }
-
-.game .btn2 {
-    font-family: 'Orbitron', sans-serif;
-    position: absolute;
+#btn2{
     bottom: 10px;
     right: 10px;
-    font-size: 30px;
-
-    border: 1px solid white;
-    box-shadow:  0 0 5px white,  0 0 5px #0bf4f3 inset;
-    color: white;
-    background-color: transparent;
-    border-radius: 5px;
-    padding: 5px;
 }
-
 .back{
     color: white;
     position: absolute;
