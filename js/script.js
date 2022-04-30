@@ -415,7 +415,7 @@ Particle.prototype = (function(o) {
     function addParticle(num) {
         var i, p;
         for (i = 0; i < num; i++) {
-            nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
+            nau = new Particle(screenWidth/2,screenHeight*9/10,PARTICLE_RADIUS);
             particles.push(nau);
         }
     }
