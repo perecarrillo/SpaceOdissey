@@ -142,6 +142,7 @@ function StartGame() {
 function ResetGame() {
     gameStarted = false;
     nau.resetSpeed();
+    nau.resetPos();
 }
 /**
  * GravityPoint
@@ -321,6 +322,11 @@ Particle.prototype = (function(o) {
 
         this._latest.set(this);
         this.add(this._speed);
+    },
+
+    resetPos: function() {
+
+        this._lastest.set(screenWidth/2, screenHeight);
     }
 
     // render: function(ctx) {
