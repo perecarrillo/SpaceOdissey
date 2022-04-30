@@ -136,7 +136,7 @@ Vector.prototype = {
 
 function StartGame() {
     gameStarted = true;
-    nau.addSpeed(Vector.new(0.7,-1));
+    nau.addSpeed(Vector.new(0.5,-0.5));
 
 }
 
@@ -153,7 +153,8 @@ function GravityPoint(x, y, radius, targets, isfinish) {
     Vector.call(this, x, y);
     this.radius = radius;
     this.currentRadius = radius * 0.5;
-    this.isfinish = isfinish;
+    this.isfinish = isfinish
+    this.gravity = radius*radius*0.00003;
 
     this._targets = {
         particles: targets.particles || [],
@@ -170,7 +171,6 @@ GravityPoint.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    gravity:       0.03,
     isMouseOver:   false,
     dragging:      false,
     destroyed:     false,
@@ -439,7 +439,7 @@ Particle.prototype = (function(o) {
                 else{
                     ResetGame();
                 }
-            } 
+            }
         }
     }
 
@@ -503,11 +503,9 @@ Particle.prototype = (function(o) {
 
 
 
-    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,30, {particles:particles, gravities: null }, false));
+    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,15, {particles:particles, gravities: null }, false));
 
     gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }, false));
-
-    gravities.push(new GravityPoint(screenWidth*3/4, 3/10*screenHeight,50, {particles:particles, gravities: null }, false));
 
     // GUI
 
@@ -534,7 +532,7 @@ Particle.prototype = (function(o) {
                 i--;
             }
         }
-      
+
         bufferCtx.save();
         bufferCtx.globalCompositeOperation = 'destination-out';
         bufferCtx.globalAlpha = 0.35;
