@@ -490,6 +490,7 @@ Particle.prototype = (function(o) {
     // Start Update
 
     var loop = function() {
+        if (particles.length == 0) addParticle(control.particleNum);
         var i, len, g, p;
 
         context.save();
