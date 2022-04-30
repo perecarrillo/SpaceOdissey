@@ -144,7 +144,7 @@ function ResetGame() {
     gameStarted = false;
     particles.pop();
     var i, p;
-        for (i = 0; i < num; i++) {
+        for (i = 0; i < 1; i++) {
             nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
             particles.push(nau);
         }
