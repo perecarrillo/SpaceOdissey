@@ -136,7 +136,7 @@ Vector.prototype = {
 
 function StartGame() {
     gameStarted = true;
-    nau.addSpeed(Vector.new(1,-1));
+    nau.addSpeed(Vector.new(0.7,-1));
 
 }
 
@@ -195,7 +195,6 @@ GravityPoint.prototype = (function(o) {
     },
 
     drag: function(x, y) {
-        if (!this.isfinish) {
         var a = x - this.x;
         var b = y - this.y;
         var c = Math.sqrt( a*a + b*b );
@@ -203,7 +202,6 @@ GravityPoint.prototype = (function(o) {
         if (c < this.radius) {
             this.x = x;
             this.y = y;
-        }
         }
     },
 
@@ -427,6 +425,22 @@ Particle.prototype = (function(o) {
         }
     }
 
+    function dist(xp,yp,xg,yg){
+        return Math.sqrt(((xp-xg)*(xp-xg)+(yp-yg)*(yp-yg)));
+    }
+
+    function checkCollision(x,y){
+        for (var i = 0; i < gravities.length; ++i) {
+            g = gravities[i];
+            if(dist(x,y,g.x,g.y) < g.radius){
+                if(i === 0) document.location.href = "../win.html";
+                else{
+                    ResetGame();
+                }
+            } 
+        }
+    }
+
 
     // GUI Control
 
@@ -539,15 +553,16 @@ Particle.prototype = (function(o) {
             p = particles[i];
             p.update();
             bufferCtx.moveTo(p.x, p.y);
+            checkCollision(p.x, p.y);
             bufferCtx.lineTo(p._latest.x, p._latest.y);
         }
         bufferCtx.stroke();
         bufferCtx.beginPath();
-        for (i = 0; i < len; i++) {
-            p = particles[i];
-            bufferCtx.moveTo(p.x, p.y);
-            bufferCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
-        }
+        // for (i = 0; i < len; i++) {
+        //     p = particles[i];
+        //     bufferCtx.moveTo(p.x, p.y);
+        //     bufferCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+        // }
         bufferCtx.fill();
         bufferCtx.restore();
 
@@ -559,3 +574,4 @@ Particle.prototype = (function(o) {
     loop();
 
 })();
+
