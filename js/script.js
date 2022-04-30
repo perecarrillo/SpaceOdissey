@@ -138,6 +138,11 @@ function StartGame() {
     nau.addSpeed(Vector.new(1,-1));
 
 }
+
+function ResetGame() {
+    gameStarted = false;
+    nau.resetSpeed();
+}
 /**
  * GravityPoint
  */
@@ -303,6 +308,10 @@ Particle.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
+    resetSpeed: function() {
+        this._speed.set(0,0);
+    },
+
     addSpeed: function(d) {
         if (gameStarted) this._speed.add(d);
     },
