@@ -325,8 +325,8 @@ Particle.prototype = (function(o) {
     },
 
     resetPos: function() {
-
-        this._lastest.set(screenWidth/2, screenHeight);
+        this.x = 0;
+        //this._lastest.set(screenWidth/2, screenHeight);
     }
 
     // render: function(ctx) {
