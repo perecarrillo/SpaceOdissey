@@ -161,7 +161,7 @@ GravityPoint.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    gravity:       0.05,
+    gravity:       0.01,
     isMouseOver:   false,
     dragging:      false,
     destroyed:     false,
@@ -381,90 +381,6 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
-    /*function mouseMove(e) {
-        console.log("mouseMove");
-        mouse.set(e.clientX, e.clientY);
-
-        var i, g;
-        for (i = gravities.length - 1; i >= 0; i--) {
-            g = gravities[i];
-            if ((g.hitTest(mouse)))
-                g.isMouseOver = true;
-            else
-                g.isMouseOver = false;
-        }
-
-        //canvas.style.cursor = hit ? 'pointer' : 'default';
-    }
-
-    function mouseDown(e) {
-
-        console.log("mouseDown");
-        for (var i = gravities.length - 1; i >= 0; i--) {
-            if (gravities[i].isMouseOver) {
-                gravities[i].startDrag(mouse);
-                return;
-
-            }
-        }
-    }
-
-    function mouseUp(e) {
-        console.log("mouseUp");
-        for (var i = 0, len = gravities.length; i < len; i++) {
-            if (gravities[i].dragging) {
-                gravities[i].endDrag();
-                break;
-            }
-        }
-    }*/
-
-
-    /*let moving = null;
-function mouseMove(e) {
-    mouse.set(e.clientX, e.clientY);
-    let i, g, hit = false;
-    for (i = gravities.length - 1; i >= 0; i--) {
-            g = gravities[i];
-            if ((!hit && g.hitTest(mouse)) || g.dragging)
-                g.isMouseOver = hit = true;
-            else
-                g.isMouseOver = false;
-        }
-
-
-        if (moving) {
-            if (e.clientX) {
-                moving.style.left = e.clientX - moving.cientWidth/2;
-                moving.style.top = e.clientY - moving.clientHeight/2;
-            }
-            else {
-            // touchmove - assuming a single touchpoint
-            moving.style.left = event.changedTouches[0].clientX - moving.clientWidth/2;
-            moving.style.top = event.changedTouches[0].clientY - moving.clientHeight/2;
-        }
-    }
-}
-
-
-function mouseDown(e) {
-        moving = e.target;
-
-        moving.style.position = 'fixed';
-    }
-
-function mouseUp(e) {
-        if (moving) {
-            moving.style.left = '';
-            moving.style.top = '';
-            moving.style.height = '';
-            moving.style.width = '';
-            moving.style.position = '';
-
-            moving = null;
-    }
-}*/
-
     function doubleClick(e) {
         for (var i = gravities.length - 1; i >= 0; i--) {
             if (gravities[i].isMouseOver) {
@@ -481,7 +397,6 @@ function mouseUp(e) {
         var i, p;
         for (i = 0; i < num; i++) {
             nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
-            nau.addSpeed(Vector.new(0,0));
             particles.push(nau);
         }
     }
@@ -509,7 +424,6 @@ function mouseUp(e) {
     window.addEventListener('resize', resize, false);
     resize(null);
 
-    addParticle(control.particleNum);
 
     canvas.addEventListener('touchmove', function(e) {
         var touchLocation = e.targetTouches[0];
@@ -548,9 +462,13 @@ function mouseUp(e) {
     canvas.addEventListener('dblclick', doubleClick, false);
 
 
-    gravities.push(new GravityPoint(screenWidth/10, 5/10*screenHeight,30, {particles:particles, gravities: null }));
+    addParticle(control.particleNum);
 
-    gravities.push(new GravityPoint(screenWidth/10, 9/10*screenHeight,40, {particles:particles, gravities: null }));
+    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,30, {particles:particles, gravities: null }));
+
+    gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }));
+
+    gravities.push(new GravityPoint(screenWidth*3/4, 3/10*screenHeight,40, {particles:particles, gravities: null }));
 
     // GUI
 
