@@ -4,7 +4,7 @@ html{
     font-family: 'Orbitron', sans-serif;
     overflow: hidden;
 }
-#index,#creators{
+#index,#creators, #levels{
     text-align: center;
     background: url("../img/background.gif") no-repeat;
     background-size: cover;
@@ -18,13 +18,13 @@ a{
 }
 
 
-#index ul, #creators ul{
+#index ul, #creators ul, #levels ul{
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-#index ul li, #creators ul li{
+#index ul li, #creators ul li, #levels ul li{
     list-style: none;       
     margin: 5em;
 }
@@ -61,7 +61,6 @@ a{
     left: 0;
     padding: 5px 15px;
     color: #eee;
-    font-size: 13px;
     background-color: rgba(0, 0, 0, .5);
 }
 
@@ -71,6 +70,8 @@ a{
     left: 10px;
     font-size: 30px;
 }
+
+
 
 
 
