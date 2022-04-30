@@ -3,6 +3,7 @@
 html{
     font-family: 'Orbitron', sans-serif;
     overflow: hidden;
+    height: 100vh;
 }
 #index,#creators, #levels{
     text-align: center;
@@ -31,7 +32,6 @@ a{
 
 #index main, #index footer{
     
-    height: 100vh;
     justify-content: center;
 }
 
