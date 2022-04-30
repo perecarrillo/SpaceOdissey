@@ -26,3 +26,10 @@ canvas {
     font-size: 13px;
     background-color: rgba(0, 0, 0, .5);
 }
+
+.btn {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 30px;
+}

@@ -12,6 +12,7 @@ window.requestAnimationFrame = (function(){
             };
 })();
 
+var nau;
 
 /**
  * Vector
@@ -37,6 +38,12 @@ Vector.random = function() {
     return new Vector(
         Math.random() * 2 - 1,
         Math.random() * 2 - 1
+    );
+};
+
+Vector.new = function(a, b) {
+    return new Vector(
+        a,b
     );
 };
 
@@ -124,6 +131,10 @@ Vector.prototype = {
 };
 
 
+
+function StartGame() {
+    nau.addSpeed(Vector.new(1,-1));
+}
 /**
  * GravityPoint
  */
@@ -324,7 +335,7 @@ Particle.prototype = (function(o) {
     // Configs
 
     var BACKGROUND_COLOR      = 'rgba(11, 51, 56, 1)',
-        PARTICLE_RADIUS       = 1,
+        PARTICLE_RADIUS       = 10,
         G_POINT_RADIUS        = 10,
         G_POINT_RADIUS_LIMITS = 65;
 
@@ -411,13 +422,9 @@ Particle.prototype = (function(o) {
     function addParticle(num) {
         var i, p;
         for (i = 0; i < num; i++) {
-            p = new Particle(
-                Math.floor(Math.random() * screenWidth - PARTICLE_RADIUS * 2) + 1 + PARTICLE_RADIUS,
-                Math.floor(Math.random() * screenHeight - PARTICLE_RADIUS * 2) + 1 + PARTICLE_RADIUS,
-                PARTICLE_RADIUS
-            );
-            p.addSpeed(Vector.random());
-            particles.push(p);
+            nau = new Particle(screenWidth/2,screenHeight,PARTICLE_RADIUS);
+            nau.addSpeed(Vector.new(0,0));
+            particles.push(nau);
         }
     }
 
@@ -432,7 +439,7 @@ Particle.prototype = (function(o) {
     // GUI Control
 
     control = {
-        particleNum: 100
+        particleNum: 1
     };
 
 
@@ -453,18 +460,6 @@ Particle.prototype = (function(o) {
 
 
     // GUI
-
-    gui = new dat.GUI();
-    gui.add(control, 'particleNum', 0, 500).step(1).name('Particle Num').onChange(function() {
-        var n = (control.particleNum | 0) - particles.length;
-        if (n > 0)
-            addParticle(n);
-        else if (n < 0)
-            removeParticle(-n);
-    });
-    gui.add(GravityPoint, 'interferenceToPoint').name('Interference Between Point');
-    gui.close();
-
 
     // Start Update
 
