@@ -14,6 +14,7 @@ window.requestAnimationFrame = (function(){
 
 var nau;
 var gameStarted = false;
+var particles;
 
 /**
  * Vector
@@ -141,8 +142,9 @@ function StartGame() {
 
 function ResetGame() {
     gameStarted = false;
-    nau.resetSpeed();
-    nau.resetPos();
+    particles.pop();
+    /*nau.resetSpeed();
+    nau.resetPos();*/
 }
 /**
  * GravityPoint
@@ -212,8 +214,8 @@ GravityPoint.prototype = (function(o) {
     render: function(ctx) {
         if (this.destroyed) return;
 
-        var particles = this._targets.particles,
-            i, len;
+        particles = this._targets.particles;
+            var i, len;
 
         for (i = 0, len = particles.length; i < len; i++) {
             particles[i].addSpeed(Vector.sub(this, particles[i]).normalize().scale(this.gravity));
