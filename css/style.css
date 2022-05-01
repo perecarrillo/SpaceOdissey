@@ -12,6 +12,8 @@ html{
 
     height: 100vh;
     overflow: hidden;
+    overscroll-behavior-y: contain;
+    
 }
 
 a{
