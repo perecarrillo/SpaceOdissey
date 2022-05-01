@@ -35,6 +35,10 @@ a{
   font-size: 30px;   
 }
 
+#index h2{
+  padding-top: 20px;
+}
+
 #index main, #index footer{
     
     justify-content: center;
