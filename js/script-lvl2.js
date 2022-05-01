@@ -350,9 +350,7 @@ Particle.prototype = (function(o) {
     // Configs
 
     var BACKGROUND_COLOR      = 'rgba(11, 51, 56, 1)',
-        PARTICLE_RADIUS       = 10,
-        G_POINT_RADIUS        = 10,
-        G_POINT_RADIUS_LIMITS = 65;
+        PARTICLE_RADIUS       = 10;
 
 
     // Vars
@@ -360,11 +358,9 @@ Particle.prototype = (function(o) {
     var canvas, context,
         bufferCvs, bufferCtx,
         screenWidth, screenHeight,
-        mouse = new Vector(),
         gravities = [],
         particles = [],
-        grad,
-        gui, control;
+        grad, control;
 
 
     // Event Listeners
@@ -385,14 +381,6 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
-    function doubleClick(e) {
-        for (var i = gravities.length - 1; i >= 0; i--) {
-            if (gravities[i].isMouseOver) {
-                gravities[i].collapse();
-                break;
-            }
-        }
-    }
 
 
     // Functions
@@ -402,13 +390,6 @@ Particle.prototype = (function(o) {
         for (i = 0; i < num; i++) {
             nau = new Particle(screenWidth/2,screenHeight*9/10,PARTICLE_RADIUS);
             particles.push(nau);
-        }
-    }
-
-    function removeParticle(num) {
-        if (particles.length < num) num = particles.length;
-        for (var i = 0; i < num; i++) {
-            particles.pop();
         }
     }
 
@@ -458,7 +439,6 @@ Particle.prototype = (function(o) {
         }
     });
 
-    canvas.addEventListener('dblclick', doubleClick, false);
 
 
     addParticle(control.particleNum);
@@ -477,7 +457,6 @@ Particle.prototype = (function(o) {
 
     gravities.push(new GravityPoint(screenWidth*2/3, 2/3*screenHeight,25, {particles:particles, gravities: null }, false, true));
 
-    // GUI
 
     // Start Update
 
@@ -509,10 +488,7 @@ Particle.prototype = (function(o) {
         bufferCtx.fillRect(0, 0, screenWidth, screenHeight);
         bufferCtx.restore();
 
-        // パーティクルをバッファに描画
-        // for (i = 0, len = particles.length; i < len; i++) {
-        //     particles[i].render(bufferCtx);
-        // }
+        
         len = particles.length;
         bufferCtx.save();
         bufferCtx.fillStyle = bufferCtx.strokeStyle = '#fff';
@@ -528,15 +504,10 @@ Particle.prototype = (function(o) {
         }
         bufferCtx.stroke();
         bufferCtx.beginPath();
-        // for (i = 0; i < len; i++) {
-        //     p = particles[i];
-        //     bufferCtx.moveTo(p.x, p.y);
-        //     bufferCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
-        // }
+
         bufferCtx.fill();
         bufferCtx.restore();
 
-        // バッファをキャンバスに描画
         context.drawImage(bufferCvs, 0, 0);
 
         requestAnimationFrame(loop);

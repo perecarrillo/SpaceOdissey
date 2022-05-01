@@ -524,10 +524,6 @@ Particle.prototype = (function(o) {
         bufferCtx.fillRect(0, 0, screenWidth, screenHeight);
         bufferCtx.restore();
 
-        // パーティクルをバッファに描画
-        // for (i = 0, len = particles.length; i < len; i++) {
-        //     particles[i].render(bufferCtx);
-        // }
         len = particles.length;
         bufferCtx.save();
         bufferCtx.fillStyle = bufferCtx.strokeStyle = '#fff';
@@ -543,15 +539,10 @@ Particle.prototype = (function(o) {
         }
         bufferCtx.stroke();
         bufferCtx.beginPath();
-        // for (i = 0; i < len; i++) {
-        //     p = particles[i];
-        //     bufferCtx.moveTo(p.x, p.y);
-        //     bufferCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
-        // }
+
         bufferCtx.fill();
         bufferCtx.restore();
 
-        // バッファをキャンバスに描画
         context.drawImage(bufferCvs, 0, 0);
 
         requestAnimationFrame(loop);
