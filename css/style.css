@@ -101,7 +101,7 @@ a{
 }
 .back{
     color: white;
-    position: sticky;
+    position: absolute;
     bottom: 1vh;
     left: 1vw;
     font-size: 46px;
