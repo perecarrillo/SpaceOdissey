@@ -7,8 +7,6 @@ html{
     background: url("../img/background.gif") no-repeat center;
     background-size: cover;
     color: white;
-    
-    overscroll-behavior: contain;
 }
 #index,#creators, #tutorial, #win, #soon, .watchout .game{
 
