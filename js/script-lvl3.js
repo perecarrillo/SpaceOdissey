@@ -140,7 +140,7 @@ function StartGame() {
     if (!gameIsRunning) {
     gameIsRunning = true;
     gameStarted = true;
-    nau.addSpeed(Vector.new(0,-0.5));
+    nau.addSpeed(Vector.new(0,-0.25));
     }
 }
 
