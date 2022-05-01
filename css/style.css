@@ -7,10 +7,10 @@ html{
     background: url("../img/background.gif") no-repeat;
     background-size: cover;
     color: white;
-    height: 100vh;
 }
 #index,#creators, #tutorial, #win{
     
+    height: 100vh;
     overflow: hidden;
 }
 
