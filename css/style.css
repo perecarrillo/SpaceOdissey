@@ -8,7 +8,7 @@ html{
     background-size: cover;
     color: white;
 }
-#index,#creators, #tutorial, #win{
+#index,#creators, #tutorial, #win, .game{
     
     height: 100vh;
     overflow: hidden;
