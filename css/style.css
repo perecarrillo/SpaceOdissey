@@ -31,6 +31,10 @@ a{
     margin: 5em;
 }
 
+#index li{
+  font-size: 30px;   
+}
+
 #index main, #index footer{
     
     justify-content: center;
