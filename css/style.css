@@ -2,14 +2,14 @@
 
 html{
     font-family: 'Orbitron', sans-serif;
-    
+
     text-align: center;
     background: url("../img/background.gif") no-repeat center;
     background-size: cover;
     color: white;
 }
-#index,#creators, #tutorial, #win, #soon, .game{
-    
+#index,#creators, #tutorial, #win, #soon, #watchout .game{
+
     height: 100vh;
     overflow: hidden;
 }
@@ -27,9 +27,9 @@ a{
 }
 
 #index ul li, #creators ul li, #levels ul li{
-    list-style: none;       
+    list-style: none;
     margin: 5em 0;
-    font-size: 30px; 
+    font-size: 30px;
 }
 
 #index h1{
@@ -37,7 +37,7 @@ a{
 }
 
 #index main, #index footer{
-    
+
     justify-content: center;
 }
 
@@ -85,7 +85,7 @@ a{
 
 .game .btn:active{
     font-family: 'Orbitron', sans-serif;
-    
+
     font-size: 30px;
 
     border: 1px solid white;
@@ -119,7 +119,3 @@ a{
 #win p {
     padding: 1vw;
 }
-
-
-
-
