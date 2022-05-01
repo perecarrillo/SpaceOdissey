@@ -2,16 +2,16 @@
 
 html{
     font-family: 'Orbitron', sans-serif;
-    overflow: hidden;
     
-    height: 100vh;
-}
-#index,#creators, #levels, #tutorial, #win{
     text-align: center;
     background: url("../img/background.gif") no-repeat;
     background-size: cover;
     color: white;
-
+    height: 100vh;
+}
+#index,#creators, #tutorial, #win{
+    
+    overflow: hidden;
 }
 
 a{
