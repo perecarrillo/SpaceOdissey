@@ -28,7 +28,7 @@ a{
 
 #index ul li, #creators ul li, #levels ul li{
     list-style: none;       
-    margin: 5em;
+    margin: 5em 0;
 }
 
 #index li{
