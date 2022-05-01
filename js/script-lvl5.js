@@ -358,20 +358,15 @@ Particle.prototype = (function(o) {
 
     var BACKGROUND_COLOR      = 'rgba(11, 51, 56, 1)',
         PARTICLE_RADIUS       = 10,
-        G_POINT_RADIUS        = 10,
-        G_POINT_RADIUS_LIMITS = 65;
-
-
     // Vars
 
     var canvas, context,
         bufferCvs, bufferCtx,
         screenWidth, screenHeight,
-        mouse = new Vector(),
         gravities = [],
         particles = [],
         grad,
-        gui, control;
+        control;
 
 
     // Event Listeners
@@ -392,16 +387,6 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
-    function doubleClick(e) {
-        for (var i = gravities.length - 1; i >= 0; i--) {
-            if (gravities[i].isMouseOver) {
-                gravities[i].collapse();
-                break;
-            }
-        }
-    }
-
-
     // Functions
 
     function addParticle(num) {
@@ -409,13 +394,6 @@ Particle.prototype = (function(o) {
         for (i = 0; i < num; i++) {
             nau = new Particle(screenWidth/2,screenHeight*9/10,PARTICLE_RADIUS);
             particles.push(nau);
-        }
-    }
-
-    function removeParticle(num) {
-        if (particles.length < num) num = particles.length;
-        for (var i = 0; i < num; i++) {
-            particles.pop();
         }
     }
 
@@ -446,7 +424,6 @@ Particle.prototype = (function(o) {
 
 
     // Init
-
     canvas  = document.getElementById('c');
     bufferCvs = document.createElement('canvas');
 
@@ -461,11 +438,10 @@ Particle.prototype = (function(o) {
         for (i = 0; i < gravities.length; ++i) {
 
             gravities[i].drag(touchLocation.pageX, touchLocation.pageY);
-        }
+            }
         }
     });
 
-    canvas.addEventListener('dblclick', doubleClick, false);
 
 
     addParticle(control.particleNum);
@@ -492,7 +468,6 @@ Particle.prototype = (function(o) {
     gravities.push(new GravityPoint(screenWidth*1.1/2, 3.25/6*screenHeight,25, {particles:particles, gravities: null}, false, true));
 
     gravities.push(new GravityPoint(0, 9/10*screenHeight,100, {particles:particles, gravities: null }, false, false, true));
-    // GUI
 
     // Start Update
 
