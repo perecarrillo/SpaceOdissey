@@ -357,7 +357,9 @@ Particle.prototype = (function(o) {
     // Configs
 
     var BACKGROUND_COLOR      = 'rgba(11, 51, 56, 1)',
-        PARTICLE_RADIUS       = 10,
+        PARTICLE_RADIUS       = 10;
+
+
     // Vars
 
     var canvas, context,
@@ -365,8 +367,7 @@ Particle.prototype = (function(o) {
         screenWidth, screenHeight,
         gravities = [],
         particles = [],
-        grad,
-        control;
+        grad, control;
 
 
     // Event Listeners
@@ -387,6 +388,7 @@ Particle.prototype = (function(o) {
         grad.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
     }
 
+
     // Functions
 
     function addParticle(num) {
@@ -396,6 +398,7 @@ Particle.prototype = (function(o) {
             particles.push(nau);
         }
     }
+
 
     function dist(xp,yp,xg,yg){
         return Math.sqrt(((xp-xg)*(xp-xg)+(yp-yg)*(yp-yg)));
@@ -424,6 +427,7 @@ Particle.prototype = (function(o) {
 
 
     // Init
+
     canvas  = document.getElementById('c');
     bufferCvs = document.createElement('canvas');
 
@@ -438,10 +442,9 @@ Particle.prototype = (function(o) {
         for (i = 0; i < gravities.length; ++i) {
 
             gravities[i].drag(touchLocation.pageX, touchLocation.pageY);
-            }
+        }
         }
     });
-
 
 
     addParticle(control.particleNum);
