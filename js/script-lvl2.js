@@ -469,7 +469,9 @@ Particle.prototype = (function(o) {
 
     gravities.push(new GravityPoint(screenWidth*2/3, 1/3*screenHeight,20, {particles:particles, gravities: null }, false, false));      // is meta?, is asteroid?
 
-    gravities.push(new GravityPoint(screenWidth*1/3, 2/3*screenHeight,40, {particles:particles, gravities: null }, false, false));
+    gravities.push(new GravityPoint(screenWidth*1/2, 1/2*screenHeight,20, {particles:particles, gravities: null }, false, false));
+
+    gravities.push(new GravityPoint(screenWidth*1/3, 2/3*screenHeight,30, {particles:particles, gravities: null }, false, false));
 
     gravities.push(new GravityPoint(screenWidth/2, 1/5*screenHeight,25, {particles:particles, gravities: null}, false, true));
 
