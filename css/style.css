@@ -101,9 +101,10 @@ a{
 }
 .back{
     color: white;
-    position: absolute;
+    position: sticky;
     bottom: 1vh;
     left: 1vw;
+    font-size: 46px;
 }
 
 #tutorial p {
