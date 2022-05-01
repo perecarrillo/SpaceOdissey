@@ -190,7 +190,7 @@ GravityPoint.prototype = (function(o) {
 
 
     drag: function(x, y) {
-        if (!this.isfinish && !this.isasteroid) {
+        if (!this.isfinish && !this.isasteroid && !this.issun) {
 
         var a = x - this.x;
         var b = y - this.y;

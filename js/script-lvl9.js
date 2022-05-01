@@ -1,7 +1,7 @@
 /**
  * requestAnimationFrame
  */
-window.requestAnimationFrame = (function(){
+ window.requestAnimationFrame = (function(){
     return  window.requestAnimationFrame       ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame    ||
@@ -14,7 +14,9 @@ window.requestAnimationFrame = (function(){
 
 var nau;
 var gameStarted = false;
+var gameIsRunning = false;
 var particles;
+var gravities;
 
 /**
  * Vector
@@ -135,12 +137,15 @@ Vector.prototype = {
 
 
 function StartGame() {
+    if (!gameIsRunning) {
+    gameIsRunning = true;
     gameStarted = true;
     nau.addSpeed(Vector.new(0.5,-0.5));
-
+    }
 }
 
 function ResetGame() {
+    gameIsRunning = false;
     gameStarted = false;
     particles.pop();
     /*nau.resetSpeed();
@@ -149,12 +154,19 @@ function ResetGame() {
 /**
  * GravityPoint
  */
-function GravityPoint(x, y, radius, targets, isfinish) {
+function GravityPoint(x, y, radius, targets, tipo) {
     Vector.call(this, x, y);
     this.radius = radius;
     this.currentRadius = radius * 0.5;
-    this.isfinish = isfinish
-    this.gravity = radius*radius*0.000025;
+    this.isfinish = (tipo == 0 ? true : false);
+    this.isasteroid = (tipo == 1 ? true : false);
+    this.issun = (tipo == 2 ? true : false);
+    this.iswhite = (tipo == 3 ? true : false);
+    if (this.isfinish | this.isasteroid) this.gravity = 0;
+    else if (this.issun) this.gravity = 0.08;
+    else if (this.iswhite) this.gravity = -radius*radius*0.000025;
+    else this.gravity = radius*radius*0.000025;
+    console.log(this.issun);
 
     this._targets = {
         particles: targets.particles || [],
@@ -171,12 +183,7 @@ GravityPoint.prototype = (function(o) {
     for (p in o) s[p] = o[p];
     return s;
 })({
-    isMouseOver:   false,
-    dragging:      false,
-    destroyed:     false,
     _easeRadius:   0,
-    _dragDistance: null,
-    _collapsing:   false,
 
     hitTest: function(p) {
         var a = p.pageX - this.x;
@@ -186,20 +193,12 @@ GravityPoint.prototype = (function(o) {
     },
 
 
-    startDrag: function() {
-        dragging = true;
-    },
-
-    endDrag: function() {
-        dragging = false;
-    },
-
     drag: function(x, y) {
-        if (!this.isfinish) {
+        if (!this.isfinish && !this.isasteroid && !this.issun) {
+
         var a = x - this.x;
         var b = y - this.y;
         var c = Math.sqrt( a*a + b*b );
-        //console.log(c < this.radius);
         if (c < this.radius) {
             this.x = x;
             this.y = y;
@@ -235,8 +234,8 @@ GravityPoint.prototype = (function(o) {
             return;
         }
 
-        var gravities = this._targets.gravities,
-            g, absorp,
+        gravities = this._targets.gravities;
+            var g, absorp,
             area = this.radius * this.radius * Math.PI, garea;
 
         for (i = 0, len = gravities.length; i < len; i++) {
@@ -287,9 +286,31 @@ GravityPoint.prototype = (function(o) {
 
         r = Math.random() * this.currentRadius * 0.7 + this.currentRadius * 0.3;
         grd = ctx.createRadialGradient(this.x, this.y, r, this.x, this.y, this.currentRadius);
-        if (this.isfinish) grd.addColorStop(0, 'rgba(125, 0, 255, 1)');
-        else grd.addColorStop(0, 'rgba(0, 0, 0, 1)');
-        grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(255, 196, 0, 0.15)' : 'rgba(103, 181, 191, 0.75)');
+
+
+        if (this.isfinish) {
+            grd.addColorStop(0, 'rgba(125, 0, 255, 1)');
+            grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(255, 196, 0, 0.15)' : 'rgba(103, 181, 191, 0.75)');
+        }
+        else if (this.isasteroid) {
+            grd.addColorStop(0, 'rgba(100, 66, 33, 1)');
+            //grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(255, 196, 0, 0.15)' : 'rgba(103, 181, 191, 0.75)');
+        }
+
+        else if (this.issun) {
+            grd.addColorStop(0, 'rgba(200, 200, 0, 1)');
+            //grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(255, 196, 0, 0.15)' : 'rgba(103, 181, 191, 0.75)');
+        }
+
+        else if (this.iswhite) {
+            grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(100, 100, 100, 0.15)' : 'rgba(50, 50, 50, 0.75)');
+        }
+
+        else {
+            grd.addColorStop(0, 'rgba(0, 0, 0, 1)');
+            grd.addColorStop(1, Math.random() < 0.2 ? 'rgba(255, 196, 0, 0.15)' : 'rgba(103, 181, 191, 0.75)');
+        }
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.currentRadius, 0, Math.PI * 2, false);
         ctx.fillStyle = grd;
@@ -334,26 +355,6 @@ Particle.prototype = (function(o) {
         this.x = screenWidth/2;
         this.y = screenHeight;
     }
-
-    // render: function(ctx) {
-    //     if (this._speed.length() > 12) this._speed.normalize().scale(12);
-
-    //     this._latest.set(this);
-    //     this.add(this._speed);
-
-    //     ctx.save();
-    //     ctx.fillStyle = ctx.strokeStyle = '#fff';
-    //     ctx.lineCap = ctx.lineJoin = 'round';
-    //     ctx.lineWidth = this.radius * 2;
-    //     ctx.beginPath();
-    //     ctx.moveTo(this.x, this.y);
-    //     ctx.lineTo(this._latest.x, this._latest.y);
-    //     ctx.stroke();
-    //     ctx.beginPath();
-    //     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    //     ctx.fill();
-    //     ctx.restore();
-    // }
 });
 
 
@@ -432,6 +433,8 @@ Particle.prototype = (function(o) {
     }
 
     function checkCollision(x,y){
+
+        if (y < 0) ResetGame();
         for (var i = 0; i < gravities.length; ++i) {
             g = gravities[i];
             if(dist(x,y,g.x,g.y) < g.radius){
@@ -461,51 +464,40 @@ Particle.prototype = (function(o) {
 
 
     canvas.addEventListener('touchmove', function(e) {
+        if (!gameStarted) {
         var touchLocation = e.targetTouches[0];
         var i;
         for (i = 0; i < gravities.length; ++i) {
 
             gravities[i].drag(touchLocation.pageX, touchLocation.pageY);
-            //console.log(gravities[i], gravities[i].dragging);
+        }
         }
     });
-
-    canvas.addEventListener('touchstart', function(e) {
-        var i, g;
-        var touchLocation = e.targetTouches[0];
-        for (i = 0; i < gravities.length; ++i) {
-            g = gravities[i];
-            if (gravities[i].hitTest(touchLocation)) {
-                gravities[i].startDrag();
-            }
-            //console.log(gravities[i], gravities[i].dragging);
-        }
-    });
-
-    canvas.addEventListener('touchend', function(e) {
-    var i;
-    for (i = 0; i < gravities.length; ++i) {
-        g = gravities[i];
-        g.endDrag();
-    }
-  });
-
-    /*canvas.addEventListener('mousemove', mouseMove, false);
-    canvas.addEventListener('mousedown', mouseDown, false);
-    canvas.addEventListener('mouseup', mouseUp, false);*/
 
     canvas.addEventListener('dblclick', doubleClick, false);
 
 
     addParticle(control.particleNum);
 
-    gravities.push(new GravityPoint(screenWidth/2, 0, 50, {particles:null, gravities: null }, true));     //meta
+    gravities.push(new GravityPoint(screenWidth, 0, 50, {particles:null, gravities: null }, 0));     //meta
 
 
 
-    gravities.push(new GravityPoint(screenWidth/2, 3/10*screenHeight,20, {particles:particles, gravities: null }, false));
+    gravities.push(new GravityPoint(screenWidth*1/5, 2/5*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*3/5, 2.5/5*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*2/6, 2/3*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*1/2, 0.5/3*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*1/2, 1/3*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*1.2/2, 4/5*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*4/5, 4/5*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*1.7/2, 2/5*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*1.9/2, 3/5*screenHeight,15, {particles:particles, gravities: null }, 3));
+    gravities.push(new GravityPoint(screenWidth*1/2, 4/5*screenHeight,15, {particles:particles, gravities: null }, 3));
 
-    gravities.push(new GravityPoint(screenWidth/4, 3/10*screenHeight,40, {particles:particles, gravities: null }, false));
+    gravities.push(new GravityPoint(screenWidth*9/10, 2.3/3*screenHeight,50, {particles:particles, gravities: null }, 4));
+
+    gravities.push(new GravityPoint(-2.5/5*screenWidth, screenHeight*6/10,300, {particles:particles, gravities: null }, 2));
+
 
     // GUI
 
@@ -575,3 +567,4 @@ Particle.prototype = (function(o) {
 
 })();
 
+ 
