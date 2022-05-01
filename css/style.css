@@ -29,10 +29,7 @@ a{
 #index ul li, #creators ul li, #levels ul li{
     list-style: none;       
     margin: 5em 0;
-}
-
-#index li{
-  font-size: 30px;   
+    font-size: 30px; 
 }
 
 #index h1{
